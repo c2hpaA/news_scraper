@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cofacts-tool"
+version = "0.1.0"
+description = "Cofacts quick lookup tool (API + HF) with local cache, DB logging, and CLI."
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+authors = [{ name = "Your Name" }]
+license = { text = "MIT" }
+
+# 核心相依：依你程式碼使用到的套件
+dependencies = [
+  "click>=8.1",
+  "requests>=2.31",
+  "tenacity>=8.2",
+  "pydantic>=2.6",
+  "python-dotenv>=1.0",
+  "numpy>=1.24",
+  "scikit-learn>=1.3",
+  "scipy>=1.10",
+  "pandas>=2.0",
+  "datasets>=2.14",
+  "huggingface_hub>=0.20",
+  "joblib>=1.3",
+  "pyarrow>=14",         # parquet 快取用
+  "SQLAlchemy>=2.0",     # store.py 用
+]
+
+[project.optional-dependencies]
+# 向量/嵌入替代方案
+bm25 = ["rank-bm25>=0.2.2"]
+sbert = [
+  "sentence-transformers>=2.6",
+  # Torch 安裝視作業系統/CUDA 而定，建議手動裝合適的 torch 版本
+]
+dev = [
+  "pytest>=7.4",
+  "pytest-cov>=4.1",
+  "black>=24.3",
+  "isort>=5.13",
+  "mypy>=1.9",
+]
+
+[project.scripts]
+cofacts-cli = "cofacts_tool.cli:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["cofacts_tool*"]
+
+# 可選：pytest 預設
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+
+# 可選：格式化設定
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.isort]
+profile = "black"
